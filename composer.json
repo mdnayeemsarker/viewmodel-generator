@@ -3,7 +3,7 @@
   "description": "Laravel artisan generator for ViewModel classes (supports multiple models & collections)",
   "type": "library",
   "license": "MIT",
-  "version": "1.0.0", 
+  "version": "1.0", 
   "autoload": {
     "psr-4": {
       "Mdnayeemsarker\\ViewModelGenerator\\": "src/"
