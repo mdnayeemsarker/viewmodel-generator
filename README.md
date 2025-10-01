@@ -4,15 +4,15 @@ Laravel artisan generator for ViewModel classes (supports multiple models & coll
 
 # 1. Install package
 ```bash
-composer require mdnayeemsarker/viewmodel-generator```
+composer require mdnayeemsarker/viewmodel-generator
 
 # 2. Generate basic ViewModel
 ```bash
-php artisan make:viewmodel PostViewModel```
+php artisan make:viewmodel PostViewModel
 
 # 3. Generate single model ViewModel
 ```bash
-php artisan make:viewmodel UserViewModel --model=User```
+php artisan make:viewmodel UserViewModel --model=User
 ```bash
 php artisan make:viewmodel UserViewModel -m User```
 
