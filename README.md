@@ -51,4 +51,4 @@ php artisan make:viewmodel AdminReportViewModel -m User,Post -c
 
 ## License
 
-MIT © [MD NAYEEM SARKER][MIT License](LICENSE)
+MIT © [MD NAYEEM SARKER](LICENSE)
