@@ -1,0 +1,14 @@
+<?php
+
+namespace DummyNamespace;
+
+// DummyImports
+
+class DummyClass
+{
+    public function __construct(
+        // DummyConstructorParams
+    ) {
+        //
+    }
+}
