@@ -41,11 +41,11 @@ class MakeViewModel extends GeneratorCommand
     {
         $stub = parent::buildClass($name);
 
-        // if no models, just return
         $modelsOption = $this->option('model');
+
+        // if no models, just clean placeholders
         if (empty($modelsOption)) {
-            // cleanup possible placeholders
-            $stub = str_replace(['// DummyImports', "// DummyConstructorParams"], ['', ''], $stub);
+            $stub = str_replace(['// DummyImports', '// DummyConstructorParams'], ['', ''], $stub);
             return $stub;
         }
 
@@ -56,38 +56,39 @@ class MakeViewModel extends GeneratorCommand
         $constructorParams = [];
 
         foreach ($models as $model) {
-            // allow namespaced model like Admin\\User
+            // handle namespaced models like Admin\User
             $modelClass = ltrim(str_replace('/', '\\', $model), '\\');
             $baseModel = class_basename($modelClass);
 
-            // import App\Models\... unless model already contains a full namespace (contains \\)
+            // import statement
             if (Str::contains($modelClass, '\\')) {
-                // user provided namespace: use as-is
                 $imports[] = "use {$modelClass};";
             } else {
                 $imports[] = "use App\\Models\\{$baseModel};";
             }
 
+            // variable name & type
             if ($isCollection) {
-                $constructorParams[] = 'public \Illuminate\Support\Collection $' . Str::camel(Str::plural($baseModel));
+                $varName = Str::camel(Str::plural($baseModel));
+                $constructorParams[] = "public \\Illuminate\\Support\\Collection \${$varName}";
             } else {
-                $constructorParams[] = 'public ' . $baseModel . ' $' . Str::camel($baseModel);
+                $varName = Str::camel($baseModel);
+                $constructorParams[] = "public {$baseModel} \${$varName}";
             }
         }
 
-        // ensure Collection import is present when collection flag used
+        // add Collection import if using collections
         if ($isCollection) {
             array_unshift($imports, 'use Illuminate\\Support\\Collection;');
         }
 
-        // unique imports and collapse to string
-        $imports = array_unique($imports);
-        $importsText = implode("\n", $imports);
+        // unique imports
+        $importsText = implode("\n", array_unique($imports));
 
-        // constructor signature
-        $constructorText = implode(', ', $constructorParams);
+        // constructor signature with real newlines
+        $constructorText = implode(",\n        ", $constructorParams);
 
-        // replace placeholders
+        // replace placeholders in stub
         $stub = str_replace('// DummyImports', $importsText, $stub);
         $stub = str_replace('// DummyConstructorParams', $constructorText, $stub);
 
