@@ -85,7 +85,7 @@ class MakeViewModel extends GeneratorCommand
         $importsText = implode("\n", $imports);
 
         // constructor signature
-        $constructorText = implode(',\n        ', $constructorParams);
+        $constructorText = implode(', ', $constructorParams);
 
         // replace placeholders
         $stub = str_replace('// DummyImports', $importsText, $stub);
