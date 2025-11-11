@@ -3,6 +3,7 @@
 namespace Mdnayeemsarker\ViewModelGenerator\Commands;
 
 use Illuminate\Console\GeneratorCommand;
+use Illuminate\Support\Facades\File;
 use Illuminate\Support\Str;
 use Symfony\Component\Console\Input\InputOption;
 
@@ -31,6 +32,7 @@ class MakeViewModel extends GeneratorCommand
         return [
             ['model', 'm', InputOption::VALUE_OPTIONAL, 'One or multiple models (comma separated) to inject'],
             ['collection', 'c', InputOption::VALUE_NONE, 'Inject models as Collection(s)'],
+            ['ri', null, InputOption::VALUE_NONE, 'Also generate Repository and Interface for the model'],
         ];
     }
 
@@ -75,6 +77,11 @@ class MakeViewModel extends GeneratorCommand
                 $varName = Str::camel($baseModel);
                 $constructorParams[] = "public {$baseModel} \${$varName}";
             }
+
+            // 🚀 Generate repository if requested
+            if ($this->option('ri')) {
+                $this->generateRepository($baseModel);
+            }
         }
 
         // add Collection import if using collections
@@ -94,4 +101,43 @@ class MakeViewModel extends GeneratorCommand
 
         return $stub;
     }
+
+    /**
+     * Generate Repository and Interface for a given model.
+     *
+     * @param string $modelName  The base model class name (e.g., 'Gallery')
+     * @return void
+     */
+    protected function generateRepository(string $modelName): void
+    {
+        $interfaceStubPath = __DIR__ . '/../../stubs/repository-interface.stub';
+        $repositoryStubPath = __DIR__ . '/../../stubs/repository.stub';
+
+        if (!File::exists($interfaceStubPath) || !File::exists($repositoryStubPath)) {
+            $this->error('Repository stub files not found.');
+            return;
+        }
+
+        $interfaceStub = File::get($interfaceStubPath);
+        $repositoryStub = File::get($repositoryStubPath);
+
+        // Replace placeholders
+        $interfaceContent = str_replace('DummyModel', $modelName, $interfaceStub);
+        $repositoryContent = str_replace('DummyModel', $modelName, $repositoryStub);
+
+        // Define output paths
+        $interfacePath = app_path("Repositories/Interfaces/{$modelName}RepositoryInterface.php");
+        $repositoryPath = app_path("Repositories/{$modelName}Repository.php");
+
+        // Ensure directories exist
+        File::ensureDirectoryExists(dirname($interfacePath), 0755, true);
+        File::ensureDirectoryExists(dirname($repositoryPath), 0755, true);
+
+        // Write files
+        File::put($interfacePath, $interfaceContent);
+        File::put($repositoryPath, $repositoryContent);
+
+        $this->info("✅ Repository and Interface for {$modelName} created successfully.");
+    }
+
 }

@@ -1,0 +1,14 @@
+<?php
+
+namespace App\Repositories\Interfaces;
+
+use App\Models\DummyModel;
+
+interface DummyModelRepositoryInterface
+{
+    public function all();
+    public function find(int $id): ?DummyModel;
+    public function create(array $data): DummyModel;
+    public function update(int $id, array $data): bool;
+    public function delete(int $id): bool;
+}

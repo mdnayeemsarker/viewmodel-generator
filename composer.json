@@ -1,9 +1,8 @@
 {
   "name": "mdnayeemsarker/viewmodel-generator",
-  "description": "Laravel artisan generator for ViewModel classes (supports multiple models & collections)",
+  "description": "Laravel artisan generator for ViewModel classes (supports multiple models, collections, and repository generation)",
   "type": "library",
   "license": "MIT",
-  "version": "1.0", 
   "autoload": {
     "psr-4": {
       "Mdnayeemsarker\\ViewModelGenerator\\": "src/"
@@ -18,16 +17,26 @@
   },
   "require": {
     "php": ">=8.0",
-    "illuminate/support": "^8.0|^9.0|^10.0|^11.0",
-    "illuminate/console": "^8.0|^9.0|^10.0|^11.0",
+    "illuminate/support": "^8.0|^9.0|^10.0|^11.0|^12.0",
+    "illuminate/console": "^8.0|^9.0|^10.0|^11.0|^12.0",
     "symfony/console": "^5.0|^6.0|^7.0"
   },
   "authors": [
-        {
-            "name": "mdnayeemsarker",
-            "email": "dev.ab.nayeem@gmail.com"
-        }
-    ],
+    {
+      "name": "MD Nayeem Sarker",
+      "email": "dev.ab.nayeem@gmail.com",
+      "homepage": "https://github.com/mdnayeemsarker",
+      "role": "Developer"
+    }
+  ],
+  "keywords": [
+    "laravel",
+    "viewmodel",
+    "generator",
+    "artisan",
+    "repository",
+    "developer-tools"
+  ],
   "minimum-stability": "stable",
   "prefer-stable": true
 }
